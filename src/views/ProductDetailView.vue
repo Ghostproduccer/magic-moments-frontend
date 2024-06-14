@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import FileUpload from 'primevue/fileupload'
 
 const route = useRoute()
 const id = route.params.id
@@ -62,7 +63,18 @@ const handleAddToCart = (item) => {
             <div class="row">
               <div class="col">
                 <div class="itemPreview">
-                  <img src="" alt="" class="img-fluid" />
+                  <FileUpload
+                    name="demo[]"
+                    url="/api/upload"
+                    @upload="onAdvancedUpload($event)"
+                    :multiple="false"
+                    accept="image/*"
+                    :maxFileSize="1000000"
+                  >
+                    <template #empty>
+                      <p>Drag and drop files to here to upload.</p>
+                    </template>
+                  </FileUpload>
                 </div>
                 <div class="itemPreview">
                   <img src="" alt="" class="img-fluid" />
