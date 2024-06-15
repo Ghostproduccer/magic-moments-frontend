@@ -1,12 +1,18 @@
 <script setup>
-import { onMounted, ref, inject } from 'vue'
+import { onMounted, ref, inject, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import FileUpload from 'primevue/fileupload'
+import { useItemsStore } from '@/stores/items'
 
-const route = useRoute()
-const id = route.params.id
+const itemsStore = useItemsStore()
+
+const item = computed(() => {
+  return itemsStore.item
+})
 
 const router = useRouter()
+
+const route = useRoute()
 
 const qty = ref(1)
 const handleQtyChange = (add = true) => {
@@ -18,14 +24,11 @@ const handleQtyChange = (add = true) => {
   }
 }
 
-const item = ref({})
-
 onMounted(() => {
-  fetch(`http://localhost:4000/items/${id}`)
-    .then((res) => res.json())
-    .then((data) => (item.value = data))
-    .catch((e) => console.log(e))
+  const id = route.params.id
+  itemsStore.getItemById(id)
 })
+console.log('Item cargado:', item)
 
 const selectedColor = ref('#fdb82c')
 const handleColorChange = (color, id) => {
@@ -36,6 +39,8 @@ const handleColorChange = (color, id) => {
     return color
   })
 }
+
+const customBase64Uploader = () => {}
 
 const cart = ref(inject('cart'))
 
@@ -65,8 +70,9 @@ const handleAddToCart = (item) => {
                 <div class="itemPreview">
                   <FileUpload
                     name="demo[]"
-                    url="/api/upload"
-                    @upload="onAdvancedUpload($event)"
+                    url="/api/upload/overlayImage"
+                    customUpload
+                    @uploader="customBase64Uploader"
                     :multiple="false"
                     accept="image/*"
                     :maxFileSize="1000000"
@@ -86,7 +92,7 @@ const handleAddToCart = (item) => {
             </div>
           </div>
           <div class="col-lg-5">
-            <img :src="item.imgUrl" alt="" class="img-fluid item-img" />
+            <img :src="item.defaultImgUrl" alt="" class="img-fluid item-img" />
           </div>
           <div class="col-lg-5">
             <h2>{{ item.name }}</h2>

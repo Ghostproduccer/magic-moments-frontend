@@ -34,7 +34,7 @@ const props = defineProps({
     class="mySwiper"
   >
     <swiper-slide v-for="item in props.items.slice(0, 5)" :key="item.id">
-      <img :src="item.imgUrl" alt="" @click="bannerChange(item.id)" />
+      <img :src="item.defaultImgUrl" alt="" @click="bannerChange(item.id)" />
     </swiper-slide>
   </swiper>
 </template>

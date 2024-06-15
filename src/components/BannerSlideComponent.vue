@@ -52,7 +52,7 @@ const props = defineProps({
         :class="{ active: props.item.active }"
         :style="{ background: props.item.bgColor }"
       >
-        <img :src="props.item.imgUrl" alt="" />
+        <img :src="props.item.defaultImgUrl" alt="" />
       </div>
     </div>
   </div>
