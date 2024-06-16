@@ -1,8 +1,9 @@
 <script setup>
-import { onMounted, ref, inject, computed } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import FileUpload from 'primevue/fileupload'
+import FileUploadComponent from '@/components/FileUploadComponent.vue'
 import { useItemsStore } from '@/stores/items'
+import { useCartStore } from '@/stores/cart'
 
 const itemsStore = useItemsStore()
 
@@ -33,31 +34,48 @@ console.log('Item cargado:', item)
 const selectedColor = ref('#fdb82c')
 const handleColorChange = (color, id) => {
   selectedColor.value = color
-  item.value.colors.map((color) => {
+  item.value.item_color.map((color) => {
     color.active = false
-    if (color.id === id) color.active = true
+    if (color.colorName === id) color.active = true
     return color
   })
 }
 
-const customBase64Uploader = () => {}
-
-const cart = ref(inject('cart'))
+const cartStore = useCartStore()
 
 const handleAddToCart = (item) => {
   const itemToAdd = { ...item, color: selectedColor.value, qty: qty.value }
 
-  const existingItem = cart.value.find((prod) => prod.id === item.id)
+  const existingItem = cartStore.cart.find((prod) => prod.id === item.id)
 
   if (existingItem) {
     existingItem.qty += itemToAdd.qty
   } else {
-    cart.value.push(itemToAdd)
+    cartStore.addToCart(itemToAdd)
   }
 
-  console.log(cart.value)
+  console.log(cartStore.cart)
   router.push('/cart')
 }
+
+const getItemColorImage = (item) => {
+  console.log('Item recibido:', item)
+  const activeColor = item && item.item_color && item.item_color.find((color) => color.active)
+
+  if (activeColor) {
+    return activeColor.item_color_url
+  }
+
+  return item.defaultImgUrl
+}
+
+const itemImageUrl = computed(() => {
+  if (item.value) {
+    console.log('peperrroni' + getItemColorImage(item.value))
+    return getItemColorImage(item.value)
+  }
+  return ''
+})
 </script>
 <template>
   <div>
@@ -68,19 +86,7 @@ const handleAddToCart = (item) => {
             <div class="row">
               <div class="col">
                 <div class="itemPreview">
-                  <FileUpload
-                    name="demo[]"
-                    url="/api/upload/overlayImage"
-                    customUpload
-                    @uploader="customBase64Uploader"
-                    :multiple="false"
-                    accept="image/*"
-                    :maxFileSize="1000000"
-                  >
-                    <template #empty>
-                      <p>Drag and drop files to here to upload.</p>
-                    </template>
-                  </FileUpload>
+                  <FileUploadComponent v-if="item" :itemImage="itemImageUrl" />
                 </div>
                 <div class="itemPreview">
                   <img src="" alt="" class="img-fluid" />
@@ -92,7 +98,7 @@ const handleAddToCart = (item) => {
             </div>
           </div>
           <div class="col-lg-5">
-            <img :src="item.defaultImgUrl" alt="" class="img-fluid item-img" />
+            <img :src="itemImageUrl" alt="" class="img-fluid item-img" />
           </div>
           <div class="col-lg-5">
             <h2>{{ item.name }}</h2>
@@ -109,13 +115,13 @@ const handleAddToCart = (item) => {
             <h4>Product Details</h4>
             <p>{{ item.brief }}</p>
             <h4>Color</h4>
-            <div class="color" v-if="item.colors">
+            <div class="color" v-if="item.item_color">
               <span
-                v-for="color in item.colors"
-                :key="color.id"
-                :style="{ background: color.color }"
+                v-for="color in item.item_color"
+                :key="color.colorName"
+                :style="{ background: color.colorName.hex_code }"
                 :class="{ active: color.active }"
-                @click="handleColorChange(color.color, color.id)"
+                @click="handleColorChange(color.colorName.hex_code, color.colorName)"
               >
               </span>
             </div>

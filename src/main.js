@@ -14,8 +14,6 @@ import 'primevue/resources/themes/aura-light-green/theme.css'
 const app = createApp(App)
 const pinia = createPinia()
 
-app.provide('cart', [])
-
 app.use(router)
 app.use(pinia)
 app.use(PrimeVue)

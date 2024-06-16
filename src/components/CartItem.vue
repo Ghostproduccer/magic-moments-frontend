@@ -1,7 +1,7 @@
 <script setup>
-import { ref, inject } from 'vue'
+import { useCartStore } from '@/stores/cart'
 
-const cart = ref(inject('cart'))
+const cartStore = useCartStore()
 
 const props = defineProps({
   item: {
@@ -15,8 +15,8 @@ const props = defineProps({
 })
 
 const handleRemoveFromCart = (target) => {
-  let index = cart.value.indexOf(target)
-  cart.value.splice(index, 1)
+  let index = cartStore.cart.indexOf(target)
+  cartStore.cart.splice(index, 1)
 }
 </script>
 

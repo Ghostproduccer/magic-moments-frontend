@@ -1,7 +1,7 @@
 <script setup>
-import { ref, inject } from 'vue'
+import { useCartStore } from '@/stores/cart'
 
-const cart = ref(inject('cart'))
+const cartStore = useCartStore()
 
 const handleTotalItems = (items) => {
   let total = 0
@@ -15,7 +15,7 @@ const handleTotalItems = (items) => {
 <template>
   <RouterLink to="/cart" class="cart-btn">
     <i class="bi bi-cart cart"></i>
-    <span class="count">{{ handleTotalItems(cart) }}</span>
+    <span class="count">{{ handleTotalItems(cartStore.cart) }}</span>
   </RouterLink>
 </template>
 
