@@ -31,7 +31,8 @@ onMounted(() => {
 })
 console.log('Item cargado:', item)
 
-const selectedColor = ref('#fdb82c')
+const selectedColor = ref('')
+
 const handleColorChange = (color, id) => {
   selectedColor.value = color
   item.value.item_color.map((color) => {
@@ -44,9 +45,16 @@ const handleColorChange = (color, id) => {
 const cartStore = useCartStore()
 
 const handleAddToCart = (item) => {
-  const itemToAdd = { ...item, color: selectedColor.value, qty: qty.value }
+  const itemToAdd = {
+    ...item,
+    color: selectedColor.value,
+    qty: qty.value,
+    selectedColorImage: itemImageUrl
+  }
 
-  const existingItem = cartStore.cart.find((prod) => prod.id === item.id)
+  const existingItem = cartStore.cart.find(
+    (prod) => prod.id === item.id && prod.color === selectedColor.value
+  )
 
   if (existingItem) {
     existingItem.qty += itemToAdd.qty
@@ -71,7 +79,6 @@ const getItemColorImage = (item) => {
 
 const itemImageUrl = computed(() => {
   if (item.value) {
-    console.log('peperrroni' + getItemColorImage(item.value))
     return getItemColorImage(item.value)
   }
   return ''

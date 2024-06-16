@@ -24,7 +24,7 @@ const handleRemoveFromCart = (target) => {
   <tr class="shopCartItem">
     <th scope="row">{{ props.index + 1 }}</th>
     <td>
-      <img :src="props.item.defaultImgUrl" alt="" class="img-fluid" />
+      <img :src="props.item.selectedColorImage" alt="" class="img-fluid" />
     </td>
     <td>
       <RouterLink :to="`/products/${props.item.id}`">{{ props.item.name }}</RouterLink>
