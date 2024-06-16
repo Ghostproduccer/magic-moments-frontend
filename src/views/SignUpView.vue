@@ -1,4 +1,7 @@
 <script setup>
+const handlesubmit = () => {
+  console.log('nose nose')
+}
 </script>
 <template>
   <div class="container mt-2">
@@ -6,7 +9,7 @@
       <div class="container">
         <div class="container-fluid">
           <h4 class="mb-3">Sign Up</h4>
-          <br>
+          <br />
           <form method="post" @submit.prevent="handlesubmit">
             <div class="row g-3">
               <div class="col-sm-4">
@@ -96,9 +99,7 @@
 
               <hr class="my-4" />
               <br />
-              <button class="w-100 btn btn-secondary btn-lg" type="submit">
-                Continue
-              </button>
+              <button class="w-100 btn btn-secondary btn-lg" type="submit">Continue</button>
             </div>
           </form>
         </div>
@@ -115,6 +116,6 @@
   background-color: var(--primary);
 }
 h4 {
-    color: var(--primary);
+  color: var(--primary);
 }
 </style>

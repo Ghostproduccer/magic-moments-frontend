@@ -1,7 +1,7 @@
 <script setup>
-import { ref, inject } from 'vue'
+import { useCartStore } from '@/stores/cart'
 
-const cart = ref(inject('cart'))
+const cartStore = useCartStore()
 
 const props = defineProps({
   item: {
@@ -15,8 +15,8 @@ const props = defineProps({
 })
 
 const handleRemoveFromCart = (target) => {
-  let index = cart.value.indexOf(target)
-  cart.value.splice(index, 1)
+  let index = cartStore.cart.indexOf(target)
+  cartStore.cart.splice(index, 1)
 }
 </script>
 
@@ -24,7 +24,7 @@ const handleRemoveFromCart = (target) => {
   <tr class="shopCartItem">
     <th scope="row">{{ props.index + 1 }}</th>
     <td>
-      <img :src="props.item.imgUrl" alt="" class="img-fluid" />
+      <img :src="props.item.selectedColorImage" alt="" class="img-fluid" />
     </td>
     <td>
       <RouterLink :to="`/products/${props.item.id}`">{{ props.item.name }}</RouterLink>
@@ -56,7 +56,7 @@ i:hover {
 
 .shopCartItem td,
 .shopCartItem th {
-  align-items: center  ;
+  align-items: center;
   background: transparent;
   color: var(--textColor);
   font-size: 1.2rem;

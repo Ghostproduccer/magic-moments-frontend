@@ -1,11 +1,11 @@
 <script setup>
-import { inject, ref } from 'vue'
 import CartItem from '../components/CartItem.vue'
+import { useCartStore } from '@/stores/cart'
 
-const cart = ref(inject('cart'))
+const cartStore = useCartStore()
 
 const handleTotalPayment = () => {
-  return cart.value
+  return cartStore.cart
     .map((item) => item.price * item.qty * (1 - item.discount))
     .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
     .toFixed(2)
@@ -20,10 +20,10 @@ const handleTotalItems = (items) => {
 }
 
 const totalPayment = handleTotalPayment()
-const totalItems = handleTotalItems(cart.value)
+const totalItems = handleTotalItems(cartStore.cart)
 </script>
 <template>
-  <div class="shoppingCart" v-if="cart.length > 0">
+  <div class="shoppingCart" v-if="cartStore.cart.length > 0">
     <div class="container">
       <div class="row">
         <div class="table-responsive">
@@ -42,7 +42,12 @@ const totalItems = handleTotalItems(cart.value)
               </tr>
             </thead>
             <tbody>
-              <CartItem v-for="(item, index) in cart" :key="item.id" :item="item" :index="index" />
+              <CartItem
+                v-for="(item, index) in cartStore.cart"
+                :key="item.id"
+                :item="item"
+                :index="index"
+              />
             </tbody>
           </table>
         </div>

@@ -14,12 +14,12 @@ const props = defineProps({
       <p>{{ props.item.brief.slice(0, 100) }}</p>
       <div class="options-container">
         <div class="colors">
-          <h4>color</h4>
+          <h4>Available colors</h4>
           <div class="color-list">
             <span
-              v-for="color in props.item.colors"
-              :key="color.id"
-              :style="{ background: color.color }"
+              v-for="color in props.item.item_color"
+              :key="color.colorName"
+              :style="{ background: color.colorName.hex_code }"
               :class="{ active: color.active }"
             ></span>
           </div>
@@ -52,7 +52,7 @@ const props = defineProps({
         :class="{ active: props.item.active }"
         :style="{ background: props.item.bgColor }"
       >
-        <img :src="props.item.imgUrl" alt="" />
+        <img :src="props.item.defaultImgUrl" alt="" />
       </div>
     </div>
   </div>
@@ -122,14 +122,8 @@ const props = defineProps({
 .content .colors .color-list span {
   padding: 10px;
   content: '';
-  border: 5px solid var(--textColor);
   border-radius: 50%;
   transition: 0.3s;
-}
-
-.content .colors .color-list span:hover,
-.content .colors .color-list span.active {
-  box-shadow: 0px 0 20px var(--primary);
 }
 
 .content .pricing {
