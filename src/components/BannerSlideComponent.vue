@@ -1,10 +1,15 @@
 <script setup>
+import { useItemsStore } from '@/stores/items'
 const props = defineProps({
   item: {
     type: Object,
     required: true
   }
 })
+const itemsStore = useItemsStore()
+const handleItemSelected = (id) => {
+  itemsStore.getItemById(id)
+}
 </script>
 
 <template>
@@ -26,7 +31,12 @@ const props = defineProps({
         </div>
       </div>
       <div class="pricing">
-        <RouterLink :to="`/products/${props.item.id}`" class="add-to-cart">Customize!</RouterLink>
+        <RouterLink
+          :to="`/products/${props.item.id}`"
+          class="add-to-cart"
+          @click="handleItemSelected(props.item.id)"
+          >Customize!</RouterLink
+        >
 
         <span
           class="price"
