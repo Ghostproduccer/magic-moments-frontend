@@ -12,7 +12,6 @@ const item = computed(() => {
 })
 
 const router = useRouter()
-
 const route = useRoute()
 
 const qty = ref(1)
@@ -24,10 +23,16 @@ const handleQtyChange = (add = true) => {
     qty.value -= 1
   }
 }
-
 onMounted(() => {
   const id = route.params.id
-  itemsStore.getItemById(id)
+  if (
+    (item.value !== null &&
+      typeof item.value === 'object' &&
+      Object.keys(item.value).length === 0) ||
+    item.value.id !== id
+  ) {
+    itemsStore.getItemById(id)
+  }
 })
 console.log('Item cargado:', item)
 
@@ -67,7 +72,6 @@ const handleAddToCart = (item) => {
 }
 
 const getItemColorImage = (item) => {
-  console.log('Item recibido:', item)
   const activeColor = item && item.item_color && item.item_color.find((color) => color.active)
 
   if (activeColor) {
