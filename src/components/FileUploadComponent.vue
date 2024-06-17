@@ -9,6 +9,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['imageCombined'])
+
 const getItemImageFile = async (imageUrl) => {
   try {
     const response = await fetch(imageUrl)
@@ -33,13 +35,50 @@ const onFileSelected = async (event) => {
   }
 }
 
+// const onUpload = () => {
+//   const fd = new FormData()
+//   fd.append('file', selectedFile.value, selectedFile.value.name)
+//   fd.append('file2', itemImageFile.value, itemImageFile.value.name)
+//   axios
+//     .post('http://localhost:8080/api/upload/overlayImage', fd, {
+//       responseType: 'blob', // Ensure the response is of type blob
+//       maxContentLength: 100000000,
+//       maxBodyLength: 100000000
+//     })
+//     .then((res) => {
+//       const blob = new Blob([res.data], { type: 'image/png' })
+//       const blobUrl = URL.createObjectURL(blob)
+//       emit('imageCombined', blobUrl)
+//     })
+//     .catch((error) => {
+//       console.error('Failed to upload images:', error)
+//     })
+// }
+
 const onUpload = () => {
   const fd = new FormData()
-  fd.append('userImage', selectedFile.value, selectedFile.value.name)
-  fd.append('itemImage', itemImageFile.value, itemImageFile.value.name)
-  axios.post('http://localhost:8080/api/upload/overlayImage', fd).then((res) => {
-    console.log(res)
-  })
+  fd.append('file', selectedFile.value, selectedFile.value.name)
+  fd.append('file2', itemImageFile.value, itemImageFile.value.name)
+  axios
+    .post('http://localhost:8080/api/upload/overlayImage', fd, {
+      maxContentLength: 100000000,
+      maxBodyLength: 100000000,
+      responseType: 'arraybuffer' // Esto es crucial para obtener los datos binarios correctamente
+    })
+    .then((res) => {
+      console.log(res)
+      // Llamamos a una función para manejar la respuesta y mostrar la imagen
+      handleImageResponse(res)
+    })
+    .catch((error) => {
+      console.error('Failed to upload images:', error)
+    })
+}
+
+const handleImageResponse = (response) => {
+  const blob = new Blob([response.data], { type: 'image/png' })
+  const blobUrl = URL.createObjectURL(blob)
+  emit('imageCombined', blobUrl)
 }
 </script>
 <template>

@@ -87,6 +87,10 @@ const itemImageUrl = computed(() => {
   }
   return ''
 })
+
+const handleImageCombined = (combinedImageURL) => {
+  itemImageUrl.value = combinedImageURL
+}
 </script>
 <template>
   <div>
@@ -109,7 +113,12 @@ const itemImageUrl = computed(() => {
             </div>
           </div>
           <div class="col-lg-5">
-            <img :src="itemImageUrl" alt="" class="img-fluid item-img" />
+            <img
+              :src="itemImageUrl"
+              alt=""
+              class="img-fluid item-img"
+              @imageCombined="handleImageCombined"
+            />
           </div>
           <div class="col-lg-5">
             <h2>{{ item.name }}</h2>
