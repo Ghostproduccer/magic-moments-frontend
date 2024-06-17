@@ -4,6 +4,8 @@ import ProductDetailView from '../views/ProductDetailView.vue'
 import CartView from '../views/CartView.vue'
 import LoginView from '../views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
+import SignUpConfirmationView from '@/views/SignUpConfirmationView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -31,6 +33,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView
+    },
+    {
+      path: '/spconfirmation',
+      name: 'spconfirmation',
+      component: SignUpConfirmationView
     }
   ]
 })
